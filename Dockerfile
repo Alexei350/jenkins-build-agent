@@ -1,5 +1,5 @@
 # Imagem base com .NET SDK
-FROM mcr.microsoft.com/dotnet/sdk:9.0
+FROM mcr.microsoft.com/dotnet/sdk:10.0
 
 # Instala Java, Docker e SSH client
 RUN apt-get update && \
