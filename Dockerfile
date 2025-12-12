@@ -1,8 +1,11 @@
 # Imagem base com .NET SDK
 FROM mcr.microsoft.com/dotnet/sdk:10.0
 
-# Instala Java, Docker e SSH client
+# Instala Node.js (LTS), Java, Docker e SSH client
 RUN apt-get update && \
+    apt-get install -y curl && \
+    curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - && \
+    apt-get install -y nodejs && \
     apt-get install -y openjdk-17-jre && \
     apt-get install -y docker.io && \
     apt-get install -y openssh-client && \
