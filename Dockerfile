@@ -11,6 +11,9 @@ RUN apt-get update && \
     apt-get install -y openssh-client && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
+RUN dotnet tool install --global trx2junit
+ENV PATH="$PATH:/home/jenkins/.dotnet/tools"
+
 # Define JAVA_HOME
 ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
 ENV PATH="${JAVA_HOME}/bin:${PATH}"
