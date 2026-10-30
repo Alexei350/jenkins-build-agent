@@ -8,6 +8,7 @@ Imagem Docker customizada para uso como agente de build no Jenkins.
 - Node.js (LTS)
 - Java 21 (JRE)
 - Docker CLI
+- Docker Buildx (plugin CLI)
 - OpenSSH Client
 - `trx2junit` (ferramenta global do .NET)
 
