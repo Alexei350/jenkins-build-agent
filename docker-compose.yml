@@ -1,0 +1,37 @@
+# Agente Jenkins inbound rodando no PC: conecta no controller (WebSocket), sem IP fixo.
+# Uso: copie .env.example para .env, preencha JENKINS_SECRET e rode `docker compose up -d --build`.
+services:
+  agent:
+    build: .
+    image: ${DOCKER_USER:-alexei350}/jenkins-build-agent:latest
+    container_name: jenkins-agent-pc
+    restart: unless-stopped
+    # root: o socket do Docker Desktop não pertence ao grupo do usuário jenkins
+    user: root
+    working_dir: /home/jenkins/agent
+    environment:
+      HOME: /home/jenkins
+      JENKINS_URL: ${JENKINS_URL:-https://jenkins.alexei.dev.br}
+      JENKINS_AGENT_NAME: ${JENKINS_AGENT_NAME:-pc-rapido}
+      JENKINS_SECRET: ${JENKINS_SECRET:?defina JENKINS_SECRET no .env}
+    # Baixa o agent.jar do próprio controller (sempre na versão certa) e conecta por WebSocket
+    entrypoint:
+      - sh
+      - -c
+      - >-
+        curl -fsSL "$$JENKINS_URL/jnlpJars/agent.jar" -o /tmp/agent.jar &&
+        exec java -jar /tmp/agent.jar
+        -url "$$JENKINS_URL"
+        -name "$$JENKINS_AGENT_NAME"
+        -secret "$$JENKINS_SECRET"
+        -webSocket
+        -workDir /home/jenkins/agent
+    mem_limit: ${AGENT_MEM_LIMIT:-8g}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - agent-work:/home/jenkins/agent
+      - npm-cache:/home/jenkins/.npm
+
+volumes:
+  agent-work:
+  npm-cache:
