@@ -31,7 +31,10 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - agent-work:/home/jenkins/agent
       - npm-cache:/home/jenkins/.npm
+      # Pacotes do NuGet (NUGET_PACKAGES nas pipelines .NET): sem volume, somem a cada recriação do contêiner
+      - nuget-cache:/home/jenkins/.nuget/packages
 
 volumes:
   agent-work:
   npm-cache:
+  nuget-cache:
